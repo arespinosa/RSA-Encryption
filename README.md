@@ -1,5 +1,7 @@
-How to Run: 
-javac *.java
+How to Run
+1. Compile the code by running: javac *.java
+2. Then Generate the Keys w/ either key size or p,q,e
+3. 
 
 **To Generate Keys** (Note, you will get a pub_key.txt and pri_key.txt generated) 
 1. Method One: java RSAGenKey 12
