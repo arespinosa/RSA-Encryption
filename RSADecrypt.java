@@ -73,21 +73,23 @@ public class RSADecrypt{
         try (BufferedReader br = new BufferedReader(new FileReader(ciphertext))) {
             FileWriter fw = new FileWriter(outputFile);
             String line = br.readLine();
-            String[] cipherStrings = line.split("\\s+"); // split on any whitespace
+            String[] cipherStrings = line.split("\\s"); 
 
             for(String encryptBlock: cipherStrings){
                 BigInteger temp = new BigInteger(encryptBlock);
+                // plaintext = C^d mod n
                 BigInteger P = temp.modPow(d, n);
             
-                // calculate expected length in digits
-                int expectedLength = 6; // 3 chars * 2 digits per char
+                
                 String result = P.toString();
-            
-                // pad leading zeros if needed
+
+                int expectedLength = 6; 
+                // Edge Case: In case leading 0's are removed, adding them back in
                 while(result.length() < expectedLength){
                     result = "0" + result;
                 }
-            
+                
+                // Building the text three characters at a time
                 StringBuilder plaintext = new StringBuilder();
                 for(int i = 0; i < result.length(); i += 2){
                     String lookup = result.substring(i, i+2);

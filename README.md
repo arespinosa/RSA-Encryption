@@ -15,3 +15,8 @@
 1. Method: java RSAEncrypt test.txt pub_key.txt
    - This is where you give the plaintext file you want to encrypt and the pub_key.txt file created from Generate Keys.
    - The program should generate a file called test.enc, which will contain the newly generated ciphertext
+
+### **To Decrypt Ciphertext**
+1. Method: java RSADecrypt test.enc pri_key.txt 
+   - This is where you provide the ciphertext file(the one created from prev step) amd the pri_key.txt file created from Generate Keys. 
+   - The program should generate a file called test.dec, which will contain the original plaintext file. In this case, it should match test.txt 

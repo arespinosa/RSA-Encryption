@@ -75,15 +75,15 @@ public class RSAEncrypt {
         int blockSize = 3;
         
         // Encrypting each block of size 3 
-        try (FileInputStream fis = new FileInputStream(inputFile);
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFile));
         FileWriter fw = new FileWriter(outputFile)) {
    
-        int ch;
+        int character = br.read();
         String encryptNum = "";
         int count = 0;
     
-        while((ch = fis.read()) != -1) {
-            char temp = Character.toLowerCase((char) ch);
+        while(character != -1) {
+            char temp = Character.toLowerCase((char) character);
             String mapped = words.get(String.valueOf(temp));
     
             if(mapped != null){
@@ -93,14 +93,17 @@ public class RSAEncrypt {
     
             if(count == 3){
                 BigInteger P = new BigInteger(encryptNum);
+                // C = P^e % n
                 BigInteger C = P.modPow(e, n);
                 fw.write(C.toString() + " ");
                 encryptNum = "";
                 count = 0;
             }
+
+            character = br.read();
         }
     
-        // encrypt remaining characters if any
+        // In case our last block is not of size 3, we do this 
         if(!encryptNum.isEmpty()){
             BigInteger P = new BigInteger(encryptNum);
             BigInteger C = P.modPow(e, n);
