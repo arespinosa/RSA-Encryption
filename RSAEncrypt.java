@@ -2,14 +2,14 @@ import java.util.*;
 import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.math.BigInteger;
+import java.util.HashMap;
 
 public class RSAEncrypt {
 
+    // Empty Constructor to be used for main 
     public RSAEncrypt(){
 
     }
@@ -46,7 +46,7 @@ public class RSAEncrypt {
         words.put(" ", "26");
         words.put(".", "27");
         words.put(",", "28");
-
+        words.put("\n", "29");
         //First step is to extract the values from the KeyFile 
         BigInteger e = null;
         BigInteger n = null;
@@ -75,38 +75,43 @@ public class RSAEncrypt {
         int blockSize = 3;
         
         // Encrypting each block of size 3 
-        try (FileInputStream fis = new FileInputStream(inputFile)) {
-            FileWriter fw = new FileWriter(outputFile);
-            byte[] buffer = new byte[blockSize];
-            int bytesRead;
-            String encryptNum = "";
-
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                for (int i = 0; i < bytesRead; i++) {
-                    char temp = (char) buffer[i];
-                    temp = Character.toLowerCase(temp);
-                    String converted = temp + "";
-                    String mapped = words.get(converted);
-
-                    if(mapped != null) {
-                        encryptNum += words.get(converted);
-                    }
-                }
-
-                // Now that we have the current encryptedNum, we now apply the encryption
+        try (FileInputStream fis = new FileInputStream(inputFile);
+        FileWriter fw = new FileWriter(outputFile)) {
+   
+        int ch;
+        String encryptNum = "";
+        int count = 0;
+    
+        while((ch = fis.read()) != -1) {
+            char temp = Character.toLowerCase((char) ch);
+            String mapped = words.get(String.valueOf(temp));
+    
+            if(mapped != null){
+                encryptNum += mapped;
+                count++;
+            }
+    
+            if(count == 3){
                 BigInteger P = new BigInteger(encryptNum);
                 BigInteger C = P.modPow(e, n);
-
-
                 fw.write(C.toString() + " ");
                 encryptNum = "";
+                count = 0;
             }
-
-        } catch (IOException err) {
-            err.printStackTrace();
         }
+    
+        // encrypt remaining characters if any
+        if(!encryptNum.isEmpty()){
+            BigInteger P = new BigInteger(encryptNum);
+            BigInteger C = P.modPow(e, n);
+            fw.write(C.toString() + " ");
+        }
+    
+    } catch(IOException err){
+        err.printStackTrace();
     }
-
+}
+    
     public static void main(String[] args) {
         RSAEncrypt rsa = new RSAEncrypt();
         rsa.RSAEncrypt(args[0], args[1]);
