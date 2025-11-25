@@ -11,7 +11,7 @@
 - This is when you give the values for (p,q,e)
 - The program will should generate the corresponding key pairs
 
-### **To Encrypt Plaintext ** (Note, you will get a pub_key.txt and pri_key.txt generated) 
+### **To Encrypt Plaintext**
 1. Method: java RSAEncrypt test.txt pub_key.txt
    - This is where you give the plaintext file you want to encrypt and the pub_key.txt file created from Generate Keys.
    - The program should generate a file called test.enc, which will contain the newly generated ciphertext
